@@ -1,0 +1,16 @@
+
+.pagination__items{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 20px;
+  margin: 20px auto;
+  color: $primaryColor;
+}
+.pagination__item{
+  width: 40px;
+  cursor: pointer;
+}
+.pagination__item_input{
+  width: 100px;
+}

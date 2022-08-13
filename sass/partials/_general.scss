@@ -1,0 +1,48 @@
+*,
+*::before,
+*::after{
+  box-sizing: border-box;
+}
+body{
+  margin: 0;
+  padding: 0;
+  background-color: $backgroundColor;
+  font-family: $secondaryFont, serif;
+
+}
+a{
+  color: inherit;
+  text-decoration: none;
+}
+ul{
+  margin: 0;
+  padding: 0;
+}
+li{
+  list-style: none;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6{
+  margin: 0;
+}
+.container{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+  color: rgb(250 204 21);
+}
+input,
+select{
+  height: 40px;
+  width: 100%;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  color: $secondaryColor;
+  font-family: $primaryFont,serif;
+}

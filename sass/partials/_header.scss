@@ -1,0 +1,26 @@
+.header{
+  text-transform: uppercase;
+  font-family: $primaryFont;
+  letter-spacing: 1.5px;
+  background-color: $secondaryColor;
+  margin-bottom: 50px;
+  &__inner{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: $primaryColor;
+    h1{
+      padding: 20px 0;
+    }
+    .favorites{
+      border-radius: 10px;
+      padding: 10px 20px;
+      border: 2px solid $primaryColor;
+      transition: 0.3s;
+      &:hover{
+        background-color: $primaryColor;
+        color: $secondaryColor;
+      }
+    }
+  }
+}

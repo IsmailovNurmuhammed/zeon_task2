@@ -1,0 +1,105 @@
+.results{
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+  font-family: $primaryFont,serif;
+}
+.results__title{
+  letter-spacing: 4px;
+}
+span{
+  font-size: 24px;
+  letter-spacing: 2px;
+}
+.content__wrapper{
+}
+.content{
+  border: 2px solid $primaryColor;
+  border-radius: 5px;
+  padding: 20px 0;
+}
+.users{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  row-gap: 20px;
+  @include medium{
+    justify-content: center;
+  }
+
+}
+.user__card_img {
+  width: 200px;
+  height: 200px;
+  border-radius: 5px;
+  img{
+    width: 100%;
+    border-radius: 5px;
+  }
+}
+.user__card_name {
+  width: 100%;
+  text-align: center;
+  color: $secondaryColor;
+  background-color: $primaryColor;
+}
+.user__card_info {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.user__card {
+  padding: 20px;
+  width: 25%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  row-gap: 20px;
+  font-family: $primaryFont, serif;
+  letter-spacing: 2px;
+  @include largeX{
+    width: fit-content;
+  }
+
+}
+.user__card_add {
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 10px 20px;
+  border: 2px solid $primaryColor;
+  transition: 0.3s;
+  &:hover{
+    background-color: $primaryColor;
+    color: $secondaryColor;
+  }
+}
+.user__card_repos {
+  border-radius: 5px;
+  padding: 10px 20px;
+  border: 2px solid $primaryColor;
+  transition: 0.3s;
+  &:hover{
+    background-color: $primaryColor;
+    color: $secondaryColor;
+  }
+}
+.user__card_git{
+  text-align: center;
+  position: relative;
+  &:hover{
+    width: 100%;
+    &::after{
+      transition: all 0.3s;
+      width: 100%;
+      content: '';
+      position: absolute;
+      background-color: $primaryColor;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+    }
+  }
+}
