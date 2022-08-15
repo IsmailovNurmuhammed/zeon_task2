@@ -7,8 +7,24 @@ body{
   margin: 0;
   padding: 0;
   background-color: $backgroundColor;
-  font-family: $secondaryFont, serif;
+  font-family: sans-serif;
+}
+body::-webkit-scrollbar {
+  width: 10px;
+  background-color: #fff;
+}
 
+body::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: $primaryColor;
+  &:hover{
+    background-color: $secondaryColor;
+    // background-color: rgba(250, 204, 21, .8);
+  }
+}
+
+body::-webkit-scrollbar-track {
+  background-color: #c0c0c0;
 }
 a{
   color: inherit;
@@ -44,5 +60,11 @@ select{
   border-radius: 5px;
   padding: 10px 20px;
   color: $secondaryColor;
-  font-family: $primaryFont,serif;
+  font-family: sans-serif;
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+  }

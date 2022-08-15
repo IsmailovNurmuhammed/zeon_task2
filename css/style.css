@@ -8,7 +8,24 @@ body {
   margin: 0;
   padding: 0;
   background-color: #3f3f46;
-  font-family: "Silkscreen", cursive, serif;
+  font-family: sans-serif;
+}
+
+body::-webkit-scrollbar {
+  width: 10px;
+  background-color: #fff;
+}
+
+body::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #facc15;
+}
+body::-webkit-scrollbar-thumb:hover {
+  background-color: #1f2937;
+}
+
+body::-webkit-scrollbar-track {
+  background-color: #c0c0c0;
 }
 
 a {
@@ -50,7 +67,13 @@ select {
   border-radius: 5px;
   padding: 10px 20px;
   color: #1f2937;
-  font-family: "Bebas Neue", cursive, serif;
+  font-family: sans-serif;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  /* display: none; <- Crashes Chrome on hover */
+  -webkit-appearance: none;
 }
 
 .header {
@@ -86,7 +109,7 @@ select {
   grid-column-gap: 40px;
   grid-row-gap: 0px;
   align-items: center;
-  font-family: "Silkscreen", cursive, serif;
+  font-family: sans-serif;
   margin-bottom: 50px;
 }
 @media screen and (max-width: 960px) {

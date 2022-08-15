@@ -19,6 +19,19 @@ export class Search {
         // this.view.loadMoreBtn.addEventListener('click', this.loadMoreUsers.bind(this));
         this.currentPage = 1;
         this.usersCount = 0;
+
+        this.view.sort.addEventListener("change", () => {
+            console.log("sort Change");
+            this.loadUsers();
+        });
+        this.view.order.addEventListener("change", () => {
+            console.log("order Change");
+            this.loadUsers();
+        });
+        this.view.perPage.addEventListener("change", () => {
+            console.log("perPage change");
+            this.loadUsers();
+        });
     }
 
     loadUsers() {
@@ -45,7 +58,13 @@ export class Search {
         let message;
         try {
             await this.api
-                .loadUsers(searchValue, this.currentPage)
+                .loadUsers(
+                    searchValue,
+                    this.currentPage,
+                    this.view.sort.value,
+                    this.view.order.value,
+                    this.view.perPage.value
+                )
                 .then((res) => {
                     res.json().then((res) => {
                         console.log(res);
