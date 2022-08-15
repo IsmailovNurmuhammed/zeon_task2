@@ -102,13 +102,21 @@ export class View {
 
         this.perPageLabel.append("per page", this.perPage);
         this.perPageItem.append(this.perPageLabel);
-        // this.sort = document.querySelector("#sort");
-        // console.log(this.sort.value);
-        // this.order = document.querySelector("#order");
-        // console.log(this.order.value);
-        // this.perPage = document.querySelector("#perPage");
-        // console.log(this.perPage);
         //????????????? Search Items
+
+        // Error message //
+        this.errorBlock = this.createElement("div", ["error__block"]);
+        this.errorMessage = this.createElement("div", ["error__message"]);
+        this.errorMessageText = this.createElement("div", [
+            "error__message_text",
+        ]);
+        this.errorBtn = this.createElement("div", ["error__btn"]);
+        this.errorBlock.append(this.errorMessage);
+        this.errorMessage.append(this.errorBtn);
+        this.errorMessage.append(this.errorMessageText);
+
+        // this.app.append(this.errorBlock);
+        // * Error message //
 
         this.searchBlock = this.createElement("div", [
             "search__wrapper",
@@ -168,8 +176,16 @@ export class View {
         this.app.append(this.paginationWrapper);
         console.log(this.paginationWrapper);
         // ===================================== //
-    }
 
+        // Preloader //
+        this.preloader = document.querySelector(".preloader");
+        console.log(this.preloader);
+        // * Preloader //
+
+        this.errorBtn.addEventListener("click", () => {
+            this.errorBlock.remove();
+        });
+    }
     createElement(elementTag, elementClass = []) {
         const element = document.createElement(elementTag);
         if (elementClass) {

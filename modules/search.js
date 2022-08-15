@@ -34,6 +34,24 @@ export class Search {
         });
     }
 
+    showLoader(isLoad) {
+        if (isLoad) {
+            this.view.preloader.classList.remove("preloader_hidden");
+        } else {
+            this.view.preloader.classList.add("preloader_hidden");
+        }
+        // this.view.preloader.addEventListener("load", () => {
+        //     /* Страница загружена, включая все ресурсы */
+        //     const preloader =
+        //         document.querySelector(
+        //             ".preloader"
+        //         ); /* находим блок Preloader */
+        //     preloader.classList.add(
+        //         "preloader_hidden"
+        //     ); /* добавляем ему класс для скрытия */
+        // });
+    }
+
     loadUsers() {
         this.setCurrentPage(1);
         if (this.view.search.value) {
@@ -43,7 +61,7 @@ export class Search {
         } else {
             // this.view.toggleLoadMoreBtn(false);
             this.clearUsers();
-            this.view.setCounterMessage("Введите запрос");
+            this.view.setCounterMessage("Enter your request");
         }
     }
 
@@ -57,6 +75,7 @@ export class Search {
         let users;
         let message;
         try {
+            this.showLoader(true);
             await this.api
                 .loadUsers(
                     searchValue,
@@ -66,22 +85,35 @@ export class Search {
                     this.view.perPage.value
                 )
                 .then((res) => {
-                    res.json().then((res) => {
-                        console.log(res);
-                        users = res.items;
-                        totalCount = res.total_count;
-                        message = this.log.counterMessage(totalCount);
-                        this.setUsersCount(this.usersCount + res.items.length);
-                        this.view.setCounterMessage(message);
-                        // this.view.toggleLoadMoreBtn(
-                        //     totalCount > 20 && this.currentPage !== totalCount
-                        // );
-                        users.forEach((user) => this.view.createUser(user));
-                    });
+                    if (res.ok) {
+                        res.json().then((res) => {
+                            console.log(res);
+                            users = res.items;
+                            totalCount = res.total_count;
+                            message = this.log.counterMessage(totalCount);
+                            this.setUsersCount(
+                                this.usersCount + res.items.length
+                            );
+                            this.view.setCounterMessage(message);
+                            // this.view.toggleLoadMoreBtn(
+                            //     totalCount > 20 && this.currentPage !== totalCount
+                            // );
+                            users.forEach((user) => this.view.createUser(user));
+                        });
+                    } else {
+                        console.log("Error:" + res.status);
+                        this.view.errorMessageText.textContent =
+                            "HTTP Error: " + res.status;
+                        this.view.app.append(this.view.errorBlock);
+                    }
                 });
         } catch (e) {
             //обработка ошибок и вывод в консоль
             console.log("Error:" + e);
+            this.view.errorMessageText.textContent = e;
+            this.view.app.append(this.view.errorBlock);
+        } finally {
+            this.showLoader(false);
         }
     }
 

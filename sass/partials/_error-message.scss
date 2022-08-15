@@ -1,0 +1,48 @@
+.error__block{
+  position: fixed;
+  top: 0;bottom: 0;left: 0;right: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.212);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.error__message{
+  width: 400px;
+  height: 200px;
+  background-color: $secondaryColor;
+  text-align: center;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  border: 2px solid $primaryColor;
+  box-shadow: 5px 5px 50px #fff;
+  color: $primaryColor;
+  font-weight: bold;
+  flex-direction: column-reverse;
+  // position: relative;
+}
+.error__message_text{
+  // position: absolute;
+  text-align: center;
+  margin-bottom: 50px;
+}
+.error__btn{
+  width: 100%;
+  align-self: flex-end;
+  color: $primaryColor;
+  padding: 20px 40px;
+  background-color: $primaryColor;
+  cursor: pointer;
+  position: relative;
+  &::after{
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    content: 'OK';
+    color: $secondaryColor;
+  }
+}

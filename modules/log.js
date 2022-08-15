@@ -1,5 +1,5 @@
 export class Log {
-  counterMessage(counter){
-    return counter ? `Найдено ${counter} пользователей ` : 'Ничего не найдено :(';
-  }
+    counterMessage(counter) {
+        return counter ? `FOUND ${counter} USER ` : "Nothing found :(";
+    }
 }
