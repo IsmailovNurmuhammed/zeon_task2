@@ -2,9 +2,11 @@ export class Search {
     setCurrentPage(pageNumber) {
         this.currentPage = pageNumber;
     }
-
     setUsersCount(count) {
         this.usersCount = count;
+    }
+    setMaxPageCount() {
+        this.maxPage = Math.ceil(this.usersCount / this.view.perPage.value);
     }
 
     constructor(view, api, log) {
@@ -12,62 +14,114 @@ export class Search {
         this.api = api;
         this.log = log;
 
+        this.view.showLoader(true);
+
+        this.userString;
+
         this.view.search.addEventListener(
             "keyup",
-            this.debounce(this.loadUsers.bind(this), 1000)
+            this.debounce(this.getUsers.bind(this), 1000)
         );
-        // this.view.loadMoreBtn.addEventListener('click', this.loadMoreUsers.bind(this));
         this.currentPage = 1;
         this.usersCount = 0;
+        this.maxPage = 0;
 
         this.view.sort.addEventListener("change", () => {
             console.log("sort Change");
-            this.loadUsers();
+            this.getUsers();
         });
         this.view.order.addEventListener("change", () => {
             console.log("order Change");
-            this.loadUsers();
+            this.getUsers();
         });
         this.view.perPage.addEventListener("change", () => {
             console.log("perPage change");
-            this.loadUsers();
+            this.getUsers();
         });
+
+        this.view.paginationNext.addEventListener("click", () => {
+            this.loadNextPage();
+        });
+        this.view.paginationPrev.addEventListener("click", () => {
+            this.loadPrevPage();
+        });
+        this.view.paginationInput.addEventListener("change", () => {
+            console.log(
+                "PaginationInput Value: " + this.view.paginationInput.value
+            );
+            if (this.view.paginationInput.value >= this.maxPage) {
+                this.setCurrentPage(this.maxPage);
+                this.getUsers();
+                console.log("Pagiantion page:   " + this.currentPage);
+            } else if (this.view.paginationInput.value < 1) {
+                this.setCurrentPage(1);
+                this.getUsers();
+                console.log("Pagiantion page:   " + this.currentPage);
+            } else {
+                this.setCurrentPage(this.view.paginationInput.value);
+                this.getUsers();
+                console.log("Pagiantion page:   " + this.currentPage);
+            }
+        });
+        // Auto fetch in empty input //
+        this.firstFetch = Math.random().toString(36).slice(-2);
+        this.getUsers();
+        // * Auto fetch in empty input //
     }
 
-    showLoader(isLoad) {
-        if (isLoad) {
-            this.view.preloader.classList.remove("preloader_hidden");
-        } else {
-            this.view.preloader.classList.add("preloader_hidden");
-        }
-        // this.view.preloader.addEventListener("load", () => {
-        //     /* Страница загружена, включая все ресурсы */
-        //     const preloader =
-        //         document.querySelector(
-        //             ".preloader"
-        //         ); /* находим блок Preloader */
-        //     preloader.classList.add(
-        //         "preloader_hidden"
-        //     ); /* добавляем ему класс для скрытия */
-        // });
-    }
-
-    loadUsers() {
-        this.setCurrentPage(1);
+    getUsers() {
+        this.userString = this.view.search.value;
+        console.log("Auto fetch value: " + this.firstFetch);
+        console.log("user String: " + this.userString);
         if (this.view.search.value) {
+            console.log("User fetch: " + this.userString);
+            console.log("Pagiantion page: " + this.currentPage);
             this.view.setCounterMessage("");
             this.clearUsers();
-            this.usersRequest(this.view.search.value);
+            this.usersRequest(this.userString);
+        } else if (this.userString === "") {
+            this.userString = this.firstFetch;
+            console.log("Auto fetch: " + this.firstFetch);
+            console.log("Pagiantion page: " + this.currentPage);
+            this.view.setCounterMessage("");
+            this.clearUsers();
+            this.usersRequest(this.userString);
         } else {
             // this.view.toggleLoadMoreBtn(false);
+            console.log("not");
             this.clearUsers();
             this.view.setCounterMessage("Enter your request");
         }
     }
 
-    loadMoreUsers() {
-        this.setCurrentPage(this.currentPage + 1);
-        this.usersRequest(this.view.search.value);
+    loadNextPage() {
+        if (this.maxPage === this.currentPage) {
+            console.log(this.currentPage);
+            this.currentPage = this.maxPage;
+        } else {
+            this.setCurrentPage(this.currentPage + 1);
+            this.getUsers();
+            console.log("Chanded number of page: " + this.currentPage);
+        }
+    }
+    loadPrevPage() {
+        if (
+            this.currentPage > 1 &&
+            this.view.search.value === "" &&
+            this.firstFetch
+        ) {
+            this.setCurrentPage(this.currentPage - 1);
+            console.log("Pagiantion page less: " + this.currentPage);
+            this.getUsers();
+            console.log("Pagiantion page: " + this.currentPage);
+        } else if (this.currentPage > 1 && this.view.search.value !== "") {
+            this.setCurrentPage(this.currentPage - 1);
+            this.getUsers(this.view.search.value);
+            console.log("Pagiantion page: " + this.maxPage);
+        } else {
+            this.currentPage = 1;
+            console.log("No page less than 1: " + this.currentPage);
+        }
     }
 
     async usersRequest(searchValue) {
@@ -75,7 +129,7 @@ export class Search {
         let users;
         let message;
         try {
-            this.showLoader(true);
+            this.view.showLoader(true);
             await this.api
                 .loadUsers(
                     searchValue,
@@ -91,13 +145,15 @@ export class Search {
                             users = res.items;
                             totalCount = res.total_count;
                             message = this.log.counterMessage(totalCount);
-                            this.setUsersCount(
-                                this.usersCount + res.items.length
+                            this.setUsersCount(res.total_count);
+                            this.setMaxPageCount();
+                            this.view.paginationInput.placeholder =
+                                this.maxPage;
+                            console.log(
+                                "Max available value of page: " + this.maxPage
                             );
                             this.view.setCounterMessage(message);
-                            // this.view.toggleLoadMoreBtn(
-                            //     totalCount > 20 && this.currentPage !== totalCount
-                            // );
+
                             users.forEach((user) => this.view.createUser(user));
                         });
                     } else {
@@ -113,7 +169,7 @@ export class Search {
             this.view.errorMessageText.textContent = e;
             this.view.app.append(this.view.errorBlock);
         } finally {
-            this.showLoader(false);
+            this.view.showLoader(false);
         }
     }
 

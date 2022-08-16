@@ -1,13 +1,10 @@
 export class View {
-    constructor(api) {
+    constructor(api, search) {
         this.app = document.getElementById("app");
         this.api = api;
+        this.search = search;
 
-        // this.title = this.createElement("h1", ["title"]);
-        // this.title.textContent = "GITHUB Search Users";
-        // this.searchLine = this.createElement("div", ["search-line"]);
-
-        // ...............pagination items block.............. //
+        // pagination items block //
         this.paginationWrapper = this.createElement("div", [
             "pagination__items",
             "container",
@@ -25,16 +22,15 @@ export class View {
             this.paginationInput,
             this.paginationNext
         );
-        // ...............pagination items block.............. //
+        // *  pagination items block //
 
-        // ...............results counter block.............. //
-        // this.searchInput = document.querySelector("#search_item");
+        // results counter block //
         this.resultsBlock = this.createElement("div", ["results", "container"]);
         this.searchCounter = this.createElement("span", ["results__title"]);
         this.resultsBlock.append(this.searchCounter);
-        // ...............results counter block.............. //
+        // * results counter block //
 
-        // ************* search block************** //
+        //  search block //
 
         //1 Search Item
         this.search = this.createElement("input");
@@ -97,26 +93,12 @@ export class View {
         this.perPage.type = "number";
         this.perPage.max = 100;
         this.perPage.min = 10;
+        this.perPage.value = 20;
         this.perPageLabel = this.createElement("label");
         this.perPageItem = this.createElement("div", ["search__item"]);
 
         this.perPageLabel.append("per page", this.perPage);
         this.perPageItem.append(this.perPageLabel);
-        //????????????? Search Items
-
-        // Error message //
-        this.errorBlock = this.createElement("div", ["error__block"]);
-        this.errorMessage = this.createElement("div", ["error__message"]);
-        this.errorMessageText = this.createElement("div", [
-            "error__message_text",
-        ]);
-        this.errorBtn = this.createElement("div", ["error__btn"]);
-        this.errorBlock.append(this.errorMessage);
-        this.errorMessage.append(this.errorBtn);
-        this.errorMessage.append(this.errorMessageText);
-
-        // this.app.append(this.errorBlock);
-        // * Error message //
 
         this.searchBlock = this.createElement("div", [
             "search__wrapper",
@@ -131,32 +113,21 @@ export class View {
             this.perPageItem
         );
         this.searchBlock.append(this.searchLine);
+        // * search block //
 
-        console.log(this.searchBlock);
+        // Error message //
+        this.errorBlock = this.createElement("div", ["error__block"]);
+        this.errorMessage = this.createElement("div", ["error__message"]);
+        this.errorMessageText = this.createElement("div", [
+            "error__message_text",
+        ]);
+        this.errorBtn = this.createElement("div", ["error__btn"]);
+        this.errorBlock.append(this.errorMessage);
+        this.errorMessage.append(this.errorBtn);
+        this.errorMessage.append(this.errorMessageText);
+        // * Error message //
 
-        // ************* search block************** //
-
-        // this.searchLine.append(this.searchInput);
-        // this.searchLine.append(this.searchCounter);
-
-        // this.usersWrapper = this.createElement("div", ["users-wrapper"]);
-        // this.usersList = this.createElement("ul", ["users"]);
-        // this.userWrapper = this.createElement("div", ["user-info"]);
-        // this.usersWrapper.append(this.usersList);
-
-        // this.main = this.createElement("div", ["main"]);
-        // this.main.append(this.usersWrapper);
-        // this.main.append(this.userWrapper);
-
-        // this.loadMoreBtn = this.createElement("button", ["btn"]);
-        // this.loadMoreBtn.textContent = "Загрузить еще";
-        // this.loadMoreBtn.style.display = "none";
-        // this.usersWrapper.append(this.loadMoreBtn);
-
-        // this.app.append(this.title);
-        // this.app.append(this.searchLine);
-        // this.app.append(this.main);
-        // ------------------------------------ //
+        // Content //
         this.contetntWrapper = this.createElement("main", [
             "content__wrapper",
             "container",
@@ -168,14 +139,14 @@ export class View {
         this.content.append(this.usersBlock);
 
         this.app.append(this.searchBlock);
-        console.log(this.searchBlock);
+        // console.log(this.searchBlock);
         this.app.append(this.resultsBlock);
-        console.log(this.resultsBlock);
+        // console.log(this.resultsBlock);
         this.app.append(this.contetntWrapper);
-        console.log(this.contetntWrapper);
+        // console.log(this.contetntWrapper);
+        // console.log(this.paginationWrapper);/
         this.app.append(this.paginationWrapper);
-        console.log(this.paginationWrapper);
-        // ===================================== //
+        // * Content //
 
         // Preloader //
         this.preloader = document.querySelector(".preloader");
@@ -186,6 +157,7 @@ export class View {
             this.errorBlock.remove();
         });
     }
+
     createElement(elementTag, elementClass = []) {
         const element = document.createElement(elementTag);
         if (elementClass) {
@@ -197,10 +169,11 @@ export class View {
     }
     createUser(userData) {
         const userElement = this.createElement("div", ["user__card"]);
-        // console.log(userData);
-        userElement.addEventListener("click", () =>
-            this.showUserData(userData)
-        );
+        console.log(userData);
+        userElement.addEventListener("click", () => {
+            this.showUserData(userData);
+            this.addUserToFavourites(userData.login);
+        });
         userElement.innerHTML = `<div class="user__card_img">
                               <img src="${userData.avatar_url}" alt="${userData.login}">
                             </div>
@@ -214,33 +187,41 @@ export class View {
                             </div>`;
         this.usersBlock.append(userElement);
     }
-
-    showUserData(userData) {
-        const userEl = this.createElement("div", ["user"]);
-        this.usersBlock.append("");
-        this.api.loadUserData(userData.login).then((res) => {
-            console.log(res);
-            const [following, followers, repos] = res;
-            // const followingList = this.createDataList(following, "Following");
-            // const followersList = this.createDataList(followers, "Followers");
-            // const reposList = this.createDataList(repos, "Repos");
-            userEl.innerHTML = `<div class="user__card_img">
-              <img src="${userData.avatar_url}" alt="${userData.login}">
-              </div>
-              <div class="user__card_name">${userData.login}</div>
-              <a href="#" class="user__card_git">User Git</a>
-              <div class="user__card_info">
-              <div class="user__card_repos">
-                <a href="#">Show repos</a>
-              </div>
-              <div class="user__card_add">ADD</div>
-              </div>`;
-        });
-        // this.userWrapper.innerHTML = "";
-        console.log(this.usersWrapper.innerHTML);
-        // this.usersBlock.append(userEl);
+    addUserToFavourites(userLogin) {
+        console.log("placed to LocalStorage: " + userLogin);
+        localStorage.setItem(userLogin, JSON.stringify(userLogin));
     }
 
+    showUserData(userData) {
+        this.showLoader(true);
+        setTimeout(() => {
+            const userEl = this.createElement("div", ["user"]);
+            this.usersBlock.append("");
+            this.api.loadUserData(userData.login).then((res) => {
+                console.log(res);
+                const [following, followers, repos] = res;
+                const followingList = this.createDataList(following, "Following");
+                const followersList = this.createDataList(followers, "Followers");
+                const reposList = this.createDataList(repos, "Repos");
+                userEl.innerHTML = `<p>${following}</p>
+                                <p>${followers}</p>
+                                <p>${repos}</p>`;
+            });
+            // this.userWrapper.innerHTML = "";
+            // console.log(this.usersWrapper.innerHTML);
+            // this.usersBlock.append(userEl);
+            this.app.innerHTML = "";
+            this.app.append(userEl);
+            this.showLoader(false);
+        }, 1000);
+    }
+    showLoader(isLoad) {
+        if (isLoad) {
+            this.preloader.classList.remove("preloader_hidden");
+        } else {
+            this.preloader.classList.add("preloader_hidden");
+        }
+    }
     createDataList(list, title) {
         const block = this.createElement("div", ["user-block"]);
         const titleTag = this.createElement("h3", ["user-block-title"]);

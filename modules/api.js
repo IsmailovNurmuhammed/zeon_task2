@@ -1,20 +1,23 @@
 const URl = "https://api.github.com/";
-// const USER_PER_PAGE = 20;
+const USER_PER_PAGE = 20;
 
 export class Api {
-    constructor(view) {
-        this.view = view;
-    }
     async loadUsers(
         searchValue,
-        page,
+        page = 1,
         sortType = "",
         order = "",
         userPerPage = 20
     ) {
+        console.log("Searched Value: " + searchValue);
+        console.log(
+            `${URl}search/users?q=${searchValue}&per_page=${userPerPage}&page=${page}&sort=${sortType}&order=${order}`
+        );
         return await fetch(
             `${URl}search/users?q=${searchValue}&per_page=${userPerPage}&page=${page}&sort=${sortType}&order=${order}`
-        ).then((res) => res);
+        ).then((res) => {
+            return res;
+        });
     }
 
     async loadUserData(login) {
