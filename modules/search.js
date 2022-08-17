@@ -153,7 +153,6 @@ export class Search {
                                 "Max available value of page: " + this.maxPage
                             );
                             this.view.setCounterMessage(message);
-
                             users.forEach((user) => this.view.createUser(user));
                         });
                     } else {

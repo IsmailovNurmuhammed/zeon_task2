@@ -31,22 +31,6 @@ const createDataList = (list) => {
     return content.append(block);
 };
 
-// ----------------------------------
-const createDataList2 = (list) => {
-    const block = createElement("div", ["user-block"]);
-    const listTag = createElement("ul", ["user-list"]);
-    list.forEach((item) => {
-        const el = createElement("li", ["user-list-item"]);
-        el.innerHTML = `<a href="${item.html_url}">${
-            item.login ? item.login : item.name
-        } </a>`;
-        listTag.append(el);
-    });
-    block.append(listTag);
-
-    return block.innerHTML;
-};
-
 // * Functions //
 
 let content = createElement("div", ["container"]);

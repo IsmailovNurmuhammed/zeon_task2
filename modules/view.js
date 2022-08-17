@@ -46,9 +46,9 @@ export class View {
         this.sort = this.createElement("select");
 
         this.sortSelect1 = this.createElement("option");
-        this.sortSelect1.textContent = "joined";
-        this.sortSelect1.value = "joined";
-        this.sortSelect1.disabled = "joined";
+        this.sortSelect1.textContent = "sort";
+        this.sortSelect1.value = "";
+        this.sortSelect1.disabled = "disabled";
         this.sortSelect2 = this.createElement("option");
         this.sortSelect2.textContent = "joined";
         this.sortSelect2.value = "joined";
@@ -68,9 +68,9 @@ export class View {
         //3 order Item
         this.order = this.createElement("select");
         this.orderSelect1 = this.createElement("option");
-        this.orderSelect1.textContent = "asc";
-        this.orderSelect1.value = "asc";
-        this.orderSelect1.disabled = "asc";
+        this.orderSelect1.textContent = "order";
+        this.orderSelect1.value = "";
+        this.orderSelect1.disabled = "disabled";
         this.orderSelect2 = this.createElement("option");
         this.orderSelect2.textContent = "asc";
         this.orderSelect2.value = "asc";
@@ -156,11 +156,6 @@ export class View {
         this.errorBtn.addEventListener("click", () => {
             this.errorBlock.remove();
         });
-        console.log("---------------------------------------------");
-        console.log(this.sort.value);
-        console.log(this.order.value);
-        console.log(this.perPage.value);
-        console.log("---------------------------------------------");
     }
 
     createElement(elementTag, elementClass = []) {
@@ -179,22 +174,19 @@ export class View {
             // this.showUserData(userData);
 
             // --------------------------- Favourites List--------------------------------------- ///
-            // let new_data = userData.login;
-            // if (localStorage.getItem("data") == null) {
-            //     localStorage.setItem("data", "[]");
-            // }
-            // let old_data = JSON.parse(localStorage.getItem("data"));
-            // console.log(old_data);
-            // old_data.push(new_data);
-            // console.log(old_data);
-            // localStorage.setItem("data", JSON.stringify(old_data));
+            let new_data = userData.login;
+            if (localStorage.getItem("data") == null) {
+                localStorage.setItem("data", "[]");
+            }
+            let old_data = JSON.parse(localStorage.getItem("data"));
+            console.log(old_data);
+            old_data.push(new_data);
+            console.log(old_data);
+            localStorage.setItem("data", JSON.stringify(old_data));
             // --------------------------- Favourites List--------------------------------------- ///
 
             this.addUserToFavourites(userData);
             window.location.href = "/userPage.html";
-            // ТЕСТ ПОКА ЧТО--------------------------------------------------------------------------------------------------//
-
-            // ТЕСТ ПОКА ЧТО--------------------------------------------------------------------------------------------------//
         });
         userElement.innerHTML = `<div class="user__card_img">
                               <img src="${userData.avatar_url}" alt="${userData.login}">
