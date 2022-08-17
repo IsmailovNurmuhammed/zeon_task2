@@ -1,0 +1,132 @@
+.user__page{
+}
+.user__item{
+
+}
+.user__item_head{
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  border-radius: 5px;
+  background-color: $secondaryColor;
+  border-radius: 5px;
+  @include small{
+    display: block;
+    padding: 10px;
+  }
+}
+.user__item_about{
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  height: 100%;
+  flex-grow: 1;
+  row-gap: 20px;
+  @include small{
+    text-align: center;
+  }
+}
+.user__item_img{
+  text-align: center;
+  width: 200px;
+  height: 200px;
+  @include small{
+    margin: 0 auto;
+  }
+  img{
+    width: 200px;
+    height: 200px;
+    border-radius: 5px;
+    @include small{
+      text-align: center;
+    }
+  }
+}
+.user__item_link{
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  row-gap: 20px;
+  @include small{
+    display: block;
+    margin: 0 auto;
+  }
+  a{
+    text-transform: uppercase;
+    position: relative;
+    &:hover{
+      &::after{
+        content: '';
+        position: absolute;
+        width: fit-content;
+        height: 2px;
+        background-color: $primaryColor;
+        width: 100%;
+        bottom: 0;
+        left: 0;
+      }
+    }
+  }
+}
+.user__item_name{
+  display: flex;
+  justify-content: space-between;
+  row-gap: 20px;
+  text-align: center;
+  font-size: 24px;
+  @include small{
+    display: block;
+    margin: 0 auto;
+  }
+}
+.user__item_title{
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.user__item_repos{
+  background-color: red;
+  padding: 10px;
+
+  .user__item_repos-list{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+}
+.user__item_info{
+  margin: 20px 0;
+  font-size: 32px;
+}
+.repos__list{
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+}
+.repos__list_item{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  background-color: $secondaryColor;
+  padding: 30px 20px;
+  border-radius: 5px;
+}
+.add__favourites{
+  margin-right: 20px;
+  cursor: pointer;
+  @include small{
+    margin: 20px auto;
+    text-align: center;
+  }
+}
+.add__favourites_btn{
+  font-size: 18px;
+  padding: 10px 20px;
+  border: 2px solid $primaryColor;
+  border-radius: 5px;
+  transition: .3s;
+  &:hover{
+    background-color: $primaryColor;
+    color: $secondaryColor;
+  }
+}

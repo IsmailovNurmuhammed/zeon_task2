@@ -88,7 +88,6 @@ export class Search {
             this.clearUsers();
             this.usersRequest(this.userString);
         } else {
-            // this.view.toggleLoadMoreBtn(false);
             console.log("not");
             this.clearUsers();
             this.view.setCounterMessage("Enter your request");

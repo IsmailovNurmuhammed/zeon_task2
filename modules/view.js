@@ -15,8 +15,8 @@ export class View {
             "pagination__item",
             "pagination__item_input",
         ]);
-        this.paginationPrev.textContent = "Prev";
-        this.paginationNext.textContent = "Next";
+        this.paginationPrev.textContent = "<< Prev";
+        this.paginationNext.textContent = "Next >>";
         this.paginationWrapper.append(
             this.paginationPrev,
             this.paginationInput,
@@ -156,6 +156,11 @@ export class View {
         this.errorBtn.addEventListener("click", () => {
             this.errorBlock.remove();
         });
+        console.log("---------------------------------------------");
+        console.log(this.sort.value);
+        console.log(this.order.value);
+        console.log(this.perPage.value);
+        console.log("---------------------------------------------");
     }
 
     createElement(elementTag, elementClass = []) {
@@ -172,7 +177,20 @@ export class View {
         // console.log(userData);
         userElement.addEventListener("click", () => {
             // this.showUserData(userData);
-            this.addUserToFavourites(userData.login);
+
+            // --------------------------- Favourites List--------------------------------------- ///
+            // let new_data = userData.login;
+            // if (localStorage.getItem("data") == null) {
+            //     localStorage.setItem("data", "[]");
+            // }
+            // let old_data = JSON.parse(localStorage.getItem("data"));
+            // console.log(old_data);
+            // old_data.push(new_data);
+            // console.log(old_data);
+            // localStorage.setItem("data", JSON.stringify(old_data));
+            // --------------------------- Favourites List--------------------------------------- ///
+
+            this.addUserToFavourites(userData);
             window.location.href = "/userPage.html";
             // ТЕСТ ПОКА ЧТО--------------------------------------------------------------------------------------------------//
 
@@ -200,8 +218,8 @@ export class View {
         this.showLoader(true);
         setTimeout(() => {
             const userEl = this.createElement("div", ["user"]);
-            // this.usersBlock.append("");
             this.api.loadUserData(userData.login).then((res) => {
+                console.log(res);
                 console.log(userData.user_data_url);
                 const [following, followers, repos] = res;
                 const followingList = this.createDataList(
@@ -224,9 +242,6 @@ export class View {
                                       </div>
                                     </article>`;
             });
-            // this.userWrapper.innerHTML = "";
-            // console.log(this.usersWrapper.innerHTML);
-            // this.usersBlock.append(userEl);
             this.app.innerHTML = "";
             this.app.append(userEl);
             this.showLoader(false);
