@@ -77,6 +77,31 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
 
+article {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+article div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 70%;
+  height: 70%;
+  color: #fff;
+}
+article div p {
+  text-align: center;
+  color: #fff;
+}
+article div img {
+  text-align: center;
+  width: 200px;
+  height: 200px;
+}
+
 .header {
   text-transform: uppercase;
   font-family: "Bebas Neue", cursive;

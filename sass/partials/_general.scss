@@ -68,3 +68,28 @@ input::-webkit-inner-spin-button {
     /* display: none; <- Crashes Chrome on hover */
     -webkit-appearance: none;
   }
+
+article{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+    height: 70%;
+    color: #fff;
+    p{
+      text-align: center;
+      color: #fff;
+    }
+    img{
+      text-align: center;
+      width: 200px;
+      height: 200px;
+    }
+  }
+}

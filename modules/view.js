@@ -169,10 +169,14 @@ export class View {
     }
     createUser(userData) {
         const userElement = this.createElement("div", ["user__card"]);
-        console.log(userData);
+        // console.log(userData);
         userElement.addEventListener("click", () => {
-            this.showUserData(userData);
+            // this.showUserData(userData);
             this.addUserToFavourites(userData.login);
+            window.location.href = "/userPage.html";
+            // ТЕСТ ПОКА ЧТО--------------------------------------------------------------------------------------------------//
+
+            // ТЕСТ ПОКА ЧТО--------------------------------------------------------------------------------------------------//
         });
         userElement.innerHTML = `<div class="user__card_img">
                               <img src="${userData.avatar_url}" alt="${userData.login}">
@@ -196,16 +200,29 @@ export class View {
         this.showLoader(true);
         setTimeout(() => {
             const userEl = this.createElement("div", ["user"]);
-            this.usersBlock.append("");
+            // this.usersBlock.append("");
             this.api.loadUserData(userData.login).then((res) => {
-                console.log(res);
+                console.log(userData.user_data_url);
                 const [following, followers, repos] = res;
-                const followingList = this.createDataList(following, "Following");
-                const followersList = this.createDataList(followers, "Followers");
+                const followingList = this.createDataList(
+                    following,
+                    "Following"
+                );
+                const followersList = this.createDataList(
+                    followers,
+                    "Followers"
+                );
                 const reposList = this.createDataList(repos, "Repos");
-                userEl.innerHTML = `<p>${following}</p>
-                                <p>${followers}</p>
-                                <p>${repos}</p>`;
+                userEl.innerHTML = `<article>
+                                      <div>
+                                        <img src="${userData.avatar_url}">
+
+                                        <p>${userData.login}<br>Repositories</p>
+                                        <span>
+                                          ${reposList}
+                                        </span>
+                                      </div>
+                                    </article>`;
             });
             // this.userWrapper.innerHTML = "";
             // console.log(this.usersWrapper.innerHTML);

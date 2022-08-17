@@ -58,9 +58,10 @@ export class Search {
                 this.getUsers();
                 console.log("Pagiantion page:   " + this.currentPage);
             } else {
-                this.setCurrentPage(this.view.paginationInput.value);
+                this.setCurrentPage(parseInt(this.view.paginationInput.value));
                 this.getUsers();
                 console.log("Pagiantion page:   " + this.currentPage);
+                console.log(this.currentPage);
             }
         });
         // Auto fetch in empty input //
