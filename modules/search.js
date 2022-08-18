@@ -26,12 +26,17 @@ export class Search {
         this.usersCount = 0;
         this.maxPage = 0;
 
+        this.selectedSort = this.view.sort.value;
+        this.selectedOrder = this.view.order.value;
+
         this.view.sort.addEventListener("change", () => {
             console.log("sort Change");
+            this.selectedSort = this.view.sort.value;
             this.getUsers();
         });
         this.view.order.addEventListener("change", () => {
             console.log("order Change");
+            this.selectedOrder = this.view.order.value;
             this.getUsers();
         });
         this.view.perPage.addEventListener("change", () => {
@@ -134,8 +139,8 @@ export class Search {
                 .loadUsers(
                     searchValue,
                     this.currentPage,
-                    this.view.sort.value,
-                    this.view.order.value,
+                    this.selectedSort,
+                    this.selectedOrder,
                     this.view.perPage.value
                 )
                 .then((res) => {

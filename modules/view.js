@@ -44,11 +44,11 @@ export class View {
         this.searchItem.append(this.searchLabel);
         //2 sort Item
         this.sort = this.createElement("select");
-
         this.sortSelect1 = this.createElement("option");
         this.sortSelect1.textContent = "sort";
         this.sortSelect1.value = "";
         this.sortSelect1.disabled = "disabled";
+        this.sortSelect1.selected = "selected";
         this.sortSelect2 = this.createElement("option");
         this.sortSelect2.textContent = "joined";
         this.sortSelect2.value = "joined";
@@ -70,6 +70,7 @@ export class View {
         this.orderSelect1 = this.createElement("option");
         this.orderSelect1.textContent = "order";
         this.orderSelect1.value = "";
+        this.orderSelect1.selected = "selected";
         this.orderSelect1.disabled = "disabled";
         this.orderSelect2 = this.createElement("option");
         this.orderSelect2.textContent = "asc";
@@ -169,36 +170,66 @@ export class View {
     }
     createUser(userData) {
         const userElement = this.createElement("div", ["user__card"]);
-        // console.log(userData);
-        userElement.addEventListener("click", () => {
-            // this.showUserData(userData);
+        const imgBlock = this.createElement("div", ["user__card_img"]);
+        const userImg = this.createElement("img");
+        userImg.src = userData.avatar_url;
 
-            // --------------------------- Favourites List--------------------------------------- ///
-            let new_data = userData.login;
-            if (localStorage.getItem("data") == null) {
-                localStorage.setItem("data", "[]");
-            }
-            let old_data = JSON.parse(localStorage.getItem("data"));
-            console.log(old_data);
-            old_data.push(new_data);
-            console.log(old_data);
-            localStorage.setItem("data", JSON.stringify(old_data));
-            // --------------------------- Favourites List--------------------------------------- ///
+        const nameBlock = this.createElement("div", ["user__card_name"]);
+        nameBlock.textContent = userData.login;
 
+        const userLinkBlock = this.createElement("a", ["user__card_git"]);
+        userLinkBlock.href = userData.html_url;
+        userLinkBlock.textContent = "User Git";
+
+        const userCardInfo = this.createElement("div", ["user__card_info"]);
+        const userCardRepos = this.createElement("div", ["user__card_repos"]);
+        const userShowRepos = this.createElement("a");
+        userShowRepos.href = "#";
+        userShowRepos.textContent = "Show repos";
+
+        const favouriteBtn = this.createElement("div", ["user__card_add"]);
+        favouriteBtn.textContent = "ADD";
+
+        userCardRepos.append(userShowRepos);
+        imgBlock.append(userImg);
+        userElement.append(imgBlock);
+        userElement.append(nameBlock);
+        userElement.append(userLinkBlock);
+        userCardInfo.append(userCardRepos);
+        userElement.append(userCardInfo);
+        userCardInfo.append(favouriteBtn);
+
+        // console.log(userElement);
+
+        userCardRepos.addEventListener("click", () => {
             this.addUserToFavourites(userData);
             window.location.href = "/userPage.html";
         });
-        userElement.innerHTML = `<div class="user__card_img">
-                              <img src="${userData.avatar_url}" alt="${userData.login}">
-                            </div>
-                            <div class="user__card_name">${userData.login}</div>
-                            <a href="${userData.html_url}" class="user__card_git">User git</a>
-                            <div class="user__card_info">
-                              <div class="user__card_repos">
-                                <a href="#">Show repos</a>
-                              </div>
-                              <div class="user__card_add">ADD</div>
-                            </div>`;
+
+        favouriteBtn.addEventListener("click", () => {
+            // --------------------------- Favourites List--------------------------------------- ///
+            let new_data = userData.login;
+            if (localStorage.getItem("favourites") == null) {
+                localStorage.setItem("favourites", "[]");
+            }
+            let old_data = JSON.parse(localStorage.getItem("favourites"));
+            console.log(old_data);
+            old_data.push(new_data);
+            console.log(old_data);
+            localStorage.setItem("favourites", JSON.stringify(old_data));
+            // --------------------------- Favourites List--------------------------------------- ///
+        });
+        // userElement.innerHTML = `   <div class="user__card_img">
+        //                                 <img src="${userData.avatar_url}" alt="${userData.login}">
+        //                             </div>
+        //                             <div class="user__card_name">${userData.login}</div>
+        //                             <a href="${userData.html_url}" class="user__card_git">User git</a>
+        //                             <div class="user__card_info">
+        //                                 <div class="user__card_repos">
+        //                                     <a href="#">Show repos</a>
+        //                                 </div>
+        //                                 ${favouriteBtn}
+        //                             </div>`;
         this.usersBlock.append(userElement);
     }
     addUserToFavourites(userLogin) {
@@ -206,39 +237,6 @@ export class View {
         localStorage.setItem(userLogin, JSON.stringify(userLogin));
     }
 
-    showUserData(userData) {
-        this.showLoader(true);
-        setTimeout(() => {
-            const userEl = this.createElement("div", ["user"]);
-            this.api.loadUserData(userData.login).then((res) => {
-                console.log(res);
-                console.log(userData.user_data_url);
-                const [following, followers, repos] = res;
-                const followingList = this.createDataList(
-                    following,
-                    "Following"
-                );
-                const followersList = this.createDataList(
-                    followers,
-                    "Followers"
-                );
-                const reposList = this.createDataList(repos, "Repos");
-                userEl.innerHTML = `<article>
-                                      <div>
-                                        <img src="${userData.avatar_url}">
-
-                                        <p>${userData.login}<br>Repositories</p>
-                                        <span>
-                                          ${reposList}
-                                        </span>
-                                      </div>
-                                    </article>`;
-            });
-            this.app.innerHTML = "";
-            this.app.append(userEl);
-            this.showLoader(false);
-        }, 1000);
-    }
     showLoader(isLoad) {
         if (isLoad) {
             this.preloader.classList.remove("preloader_hidden");
@@ -246,28 +244,6 @@ export class View {
             this.preloader.classList.add("preloader_hidden");
         }
     }
-    createDataList(list, title) {
-        const block = this.createElement("div", ["user-block"]);
-        const titleTag = this.createElement("h3", ["user-block-title"]);
-        const listTag = this.createElement("ul", ["user-list"]);
-        titleTag.textContent = title;
-        list.forEach((item) => {
-            const el = this.createElement("li", ["user-list-item"]);
-            el.innerHTML = `<a href="${item.html_url}">${
-                item.login ? item.login : item.name
-            } </a>`;
-            listTag.append(el);
-        });
-        block.append(titleTag);
-        block.append(listTag);
-
-        return block.innerHTML;
-    }
-
-    // toggleLoadMoreBtn(show) {
-    //     this.loadMoreBtn.style.display = show ? "block" : "none";
-    // }
-
     setCounterMessage(countInfo) {
         this.searchCounter.textContent = countInfo;
     }
