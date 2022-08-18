@@ -11,8 +11,7 @@ span{
   font-size: 24px;
   letter-spacing: 2px;
 }
-.content__wrapper{
-}
+
 .content{
   // border: 2px solid $primaryColor;
   // border-radius: 5px;
@@ -63,6 +62,12 @@ span{
   @include largeX{
     width: fit-content;
   }
+  @include small{
+    width: 80%;
+  }
+  @include very-small{
+    width: 100%;
+  }
 
 }
 .user__card_add {
@@ -74,6 +79,9 @@ span{
   &:hover{
     background-color: $primaryColor;
     color: $secondaryColor;
+  }
+  &.active{
+    background-color: red;
   }
 }
 .user__card_repos {

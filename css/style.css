@@ -18,7 +18,6 @@ body::-webkit-scrollbar {
 }
 
 body::-webkit-scrollbar-thumb {
-  border-radius: 10px;
   background-color: #facc15;
 }
 body::-webkit-scrollbar-thumb:hover {
@@ -232,6 +231,16 @@ span {
     width: fit-content;
   }
 }
+@media screen and (max-width: 526px) {
+  .user__card {
+    width: 80%;
+  }
+}
+@media screen and (max-width: 370px) {
+  .user__card {
+    width: 100%;
+  }
+}
 
 .user__card_add {
   cursor: pointer;
@@ -243,6 +252,9 @@ span {
 .user__card_add:hover {
   background-color: #facc15;
   color: #1f2937;
+}
+.user__card_add.active {
+  background-color: red;
 }
 
 .user__card_repos {
@@ -622,6 +634,7 @@ span {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  gap: 20px 30px;
   background-color: #1f2937;
   padding: 30px 20px;
   border-radius: 5px;
@@ -651,7 +664,7 @@ span {
 }
 
 .add__favourites_btn {
-  font-size: 18px;
+  font-size: 16px;
   padding: 10px 20px;
   border: 2px solid #facc15;
   border-radius: 5px;
@@ -660,6 +673,113 @@ span {
 .add__favourites_btn:hover {
   background-color: #facc15;
   color: #1f2937;
+}
+
+.favourites__list {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+
+.favourites__title {
+  margin: 20px 0 40px;
+}
+
+.favourite__user {
+  background-color: #1f2937;
+  display: flex;
+  height: 200px;
+  justify-content: space-between;
+  border-radius: 5px;
+}
+
+.favourite__user_img {
+  width: 200px;
+  height: 200px;
+}
+.favourite__user_img img {
+  width: 100%;
+  border-radius: 5px;
+}
+
+.favourite__user_info {
+  flex-grow: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.favourite__user_top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.favourite__user_name {
+  font-size: 24px;
+  color: #facc15;
+}
+
+.favourite__user_favourite {
+  border: 2px solid #facc15;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+  background-color: red;
+}
+.favourite__user_favourite.active {
+  background-color: #facc15;
+  color: #1f2937;
+}
+.favourite__user_favourite:hover {
+  background-color: #facc15;
+  color: #1f2937;
+}
+
+.favourite__user_bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.favourite__user_git {
+  text-decoration: none;
+  color: #facc15;
+  position: relative;
+}
+.favourite__user_git:hover::after {
+  content: "";
+  width: 100%;
+  height: 2px;
+  background-color: #facc15;
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+}
+
+.favourite__user_link {
+  cursor: pointer;
+  color: #facc15;
+  background-color: #1f2937;
+  border-radius: 5px;
+  position: relative;
+}
+.favourite__user_link:hover::after {
+  content: "";
+  width: 100%;
+  height: 2px;
+  background-color: #facc15;
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+}
+
+.add__favourites_btn.active {
+  background-color: red;
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -103,6 +103,7 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  gap: 20px 30px;
   background-color: $secondaryColor;
   padding: 30px 20px;
   border-radius: 5px;
@@ -130,7 +131,7 @@
   }
 }
 .add__favourites_btn{
-  font-size: 18px;
+  font-size: 16px;
   padding: 10px 20px;
   border: 2px solid $primaryColor;
   border-radius: 5px;

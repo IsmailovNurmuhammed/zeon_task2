@@ -169,6 +169,11 @@ export class View {
         return element;
     }
     createUser(userData) {
+        if (localStorage.getItem("favourites") === null) {
+            localStorage.setItem("favourites", "[]");
+        }
+        let favouritesList = JSON.parse(localStorage.getItem("favourites"));
+
         const userElement = this.createElement("div", ["user__card"]);
         const imgBlock = this.createElement("div", ["user__card_img"]);
         const userImg = this.createElement("img");
@@ -192,47 +197,54 @@ export class View {
 
         userCardRepos.append(userShowRepos);
         imgBlock.append(userImg);
-        userElement.append(imgBlock);
-        userElement.append(nameBlock);
-        userElement.append(userLinkBlock);
+        userElement.append(imgBlock, nameBlock, userLinkBlock);
         userCardInfo.append(userCardRepos);
         userElement.append(userCardInfo);
         userCardInfo.append(favouriteBtn);
 
-        // console.log(userElement);
+        if (favouritesList.find((o) => o.login === userData.login)) {
+            favouriteBtn.textContent = "Remove";
+            favouriteBtn.classList.add("active");
+        } else {
+            favouriteBtn.textContent = "ADD";
+        }
 
         userCardRepos.addEventListener("click", () => {
-            this.addUserToFavourites(userData);
+            this.showUserRepos(userData);
             window.location.href = "/userPage.html";
         });
 
         favouriteBtn.addEventListener("click", () => {
-            // --------------------------- Favourites List--------------------------------------- ///
-            let new_data = userData.login;
-            if (localStorage.getItem("favourites") == null) {
-                localStorage.setItem("favourites", "[]");
+            favouriteBtn.classList.toggle("active");
+            favouriteBtn.classList.contains("active")
+                ? (favouriteBtn.textContent = "remove")
+                : (favouriteBtn.textContent = "ADD");
+
+            let newData = {
+                login: userData.login,
+                avatar_url: userData.avatar_url,
+                html_url: userData.html_url,
+                repos_url: userData.repos_url,
+            };
+            console.log(newData);
+            let favouritesArr = JSON.parse(localStorage.getItem("favourites"));
+
+            if (!favouritesArr.find((o) => o.login === userData.login)) {
+                favouritesArr.push(newData);
+            } else {
+                let indexOfitemToDelete = favouritesArr.indexOf(
+                    favouritesArr.find((o) => o.login === userData.login)
+                );
+
+                favouritesArr.splice(indexOfitemToDelete, 1);
+                console.log(favouritesArr);
             }
-            let old_data = JSON.parse(localStorage.getItem("favourites"));
-            console.log(old_data);
-            old_data.push(new_data);
-            console.log(old_data);
-            localStorage.setItem("favourites", JSON.stringify(old_data));
-            // --------------------------- Favourites List--------------------------------------- ///
+            localStorage.setItem("favourites", JSON.stringify(favouritesArr));
+            console.log(JSON.parse(localStorage.favourites));
         });
-        // userElement.innerHTML = `   <div class="user__card_img">
-        //                                 <img src="${userData.avatar_url}" alt="${userData.login}">
-        //                             </div>
-        //                             <div class="user__card_name">${userData.login}</div>
-        //                             <a href="${userData.html_url}" class="user__card_git">User git</a>
-        //                             <div class="user__card_info">
-        //                                 <div class="user__card_repos">
-        //                                     <a href="#">Show repos</a>
-        //                                 </div>
-        //                                 ${favouriteBtn}
-        //                             </div>`;
         this.usersBlock.append(userElement);
     }
-    addUserToFavourites(userLogin) {
+    showUserRepos(userLogin) {
         console.log("placed to LocalStorage: " + userLogin);
         localStorage.setItem(userLogin, JSON.stringify(userLogin));
     }

@@ -31,13 +31,8 @@ const createDataList = (list) => {
     return content.append(block);
 };
 
-// * Functions //
-
-let content = createElement("div", ["container"]);
-let userPage = createElement("div", ["user__page"]);
-let userItem = createElement("div", ["user__item"]);
-
 function showUser() {
+    let userItem = createElement("div", ["user__item"]);
     let user;
     (keys = Object.keys(localStorage)), (i = keys.length);
     while (i--) {
@@ -45,34 +40,81 @@ function showUser() {
         console.log(JSON.parse(localStorage.getItem(keys[i])));
     }
     loadUserRepos(user.login);
-    userItem.innerHTML = `
-    <h1 class="user__item_title">
-        User info
-    </h1>
-    <div class="user__item_head">
-    <div class="user__item_img"><img src="${user.avatar_url}" alt="user__item_img"></div>
-    <div class="user__item_about">
-        <div class="user__item_name">
-            <span>${user.login}</span>
-        </div>
-        <div class="user__item_link">
-            <a href="${user.html_url}">Link to gitHub</a>
-        </div>
-    </div>
-    <div class="add__favourites">
-            <span class="add__favourites_btn">ADD</span>
-    </div>
-    </div>
 
-    `;
+    const userItemTitle = createElement("h1", ["user__item_title"]);
+    userItemTitle.textContent = "User info";
+    const userItemHead = createElement("div", ["user__item_head"]);
+    const userItemHeadImg = createElement("div", ["user__item_img"]);
+    const userItemHeadAvatar = createElement("img");
+    userItemHeadAvatar.src = user.avatar_url;
+    const userItemAbout = createElement("div", ["user__item_about"]);
+    const userItemName = createElement("div", ["user__item_name"]);
+    const userItemNameSpan = createElement("span");
+    userItemNameSpan.textContent = user.login;
+    const userItemLink = createElement("div", ["user__item_link"]);
+    const userItemLinkHref = createElement("a");
+    userItemLinkHref.textContent = "Link to Github";
+    userItemLinkHref.href = user.html_url;
+    const userItemAdd = createElement("div", ["add__favourites"]);
+    const userItemAddBtn = createElement("span", ["add__favourites_btn"]);
+    userItemAddBtn.textContent = "ADD";
+
+    userItemHead.append(userItemHeadImg, userItemAbout, userItemAdd);
+    userItemHeadImg.append(userItemHeadAvatar);
+    userItemAbout.append(userItemName, userItemLink);
+    userItemName.append(userItemNameSpan);
+    userItemLink.append(userItemLinkHref);
+    userItemAdd.append(userItemAddBtn);
+    userItem.append(userItemHead);
+
+    let favouritesList = JSON.parse(localStorage.getItem("favourites"));
+
+    if (favouritesList.find((o) => o.login === user.login)) {
+        userItemAddBtn.textContent = "Remove";
+        console.log("load users if");
+        userItemAddBtn.classList.add("active");
+    } else {
+        userItemAddBtn.textContent = "ADD";
+    }
+
+    userItemAdd.addEventListener("click", (event) => {
+        event.preventDefault();
+        userItemAddBtn.classList.toggle("active");
+        userItemAddBtn.classList.contains("active")
+            ? (userItemAddBtn.textContent = "Remove")
+            : (userItemAddBtn.textContent = "Add");
+        let favouritesList = JSON.parse(localStorage.getItem("favourites"));
+
+        console.log(favouritesList);
+        console.log("uraaa");
+        if (!favouritesList.find((o) => o.login === user.login)) {
+            console.log("if");
+            favouritesList.push(user);
+            localStorage.setItem("favourites", JSON.stringify(favouritesList));
+            console.log(favouritesList);
+        } else {
+            console.log("else");
+            let indexOfitemToDelete = favouritesList.indexOf(
+                favouritesList.find((o) => o.login === user.login)
+            );
+            favouritesList.splice(indexOfitemToDelete, 1);
+            localStorage.setItem("favourites", JSON.stringify(favouritesList));
+            console.log(favouritesList);
+        }
+    });
     console.log(user.login);
     userPage.append(userItem);
     document.body.append(content);
 }
+// * Functions //
+
+let content = createElement("div", ["container"]);
+let userPage = createElement("div", ["user__page"]);
 content.append(userPage);
 let reposTitle = createElement("div", ["user__item_info"]);
-reposTitle.textContent = "Repositories";
+// reposTitle.textContent = "Repositories";
 content.append(reposTitle);
+
 // API //
 async function loadUserRepos(login) {
     showLoader(true);
@@ -83,6 +125,10 @@ async function loadUserRepos(login) {
         })
         .then((data) => {
             console.log(data);
+            data.length === 0
+                ? (reposTitle.textContent = "User not have repos")
+                : (reposTitle.textContent = "Repositories");
+            content.append(reposTitle);
             createDataList(data);
             showLoader(false);
             return data;
