@@ -107,6 +107,12 @@ article div img {
   letter-spacing: 1.5px;
   background-color: #1f2937;
   margin-bottom: 50px;
+  padding-bottom: 80px;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+  height: 80px;
 }
 .header__inner {
   display: flex;
@@ -122,6 +128,13 @@ article div img {
   padding: 10px 20px;
   border: 2px solid #facc15;
   transition: 0.3s;
+  display: flex;
+  align-items: center;
+}
+.header__inner .favorites span {
+  margin-left: 10px;
+  font-size: 16px;
+  font-family: "Bebas Neue", cursive, serif;
 }
 .header__inner .favorites:hover {
   background-color: #facc15;

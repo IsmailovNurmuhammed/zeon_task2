@@ -4,6 +4,14 @@ export class View {
         this.api = api;
         this.search = search;
 
+        this.favouritesArr = JSON.parse(localStorage.getItem("favourites"));
+
+        this.favouritesCount = this.favouritesArr.length;
+        this.favouritesCounter = this.createElement("span");
+        this.favouritesCounter.textContent = this.favouritesArr.length;
+        this.favouritesNav = document.querySelector(".favorites");
+        this.favouritesNav.append(this.favouritesCounter);
+
         // pagination items block //
         this.paginationWrapper = this.createElement("div", [
             "pagination__items",
@@ -140,18 +148,13 @@ export class View {
         this.content.append(this.usersBlock);
 
         this.app.append(this.searchBlock);
-        // console.log(this.searchBlock);
         this.app.append(this.resultsBlock);
-        // console.log(this.resultsBlock);
         this.app.append(this.contetntWrapper);
-        // console.log(this.contetntWrapper);
-        // console.log(this.paginationWrapper);/
         this.app.append(this.paginationWrapper);
         // * Content //
 
         // Preloader //
         this.preloader = document.querySelector(".preloader");
-        console.log(this.preloader);
         // * Preloader //
 
         this.errorBtn.addEventListener("click", () => {
@@ -226,26 +229,23 @@ export class View {
                 html_url: userData.html_url,
                 repos_url: userData.repos_url,
             };
-            console.log(newData);
             let favouritesArr = JSON.parse(localStorage.getItem("favourites"));
 
             if (!favouritesArr.find((o) => o.login === userData.login)) {
                 favouritesArr.push(newData);
+                this.favouritesCounter.textContent = favouritesArr.length;
             } else {
                 let indexOfitemToDelete = favouritesArr.indexOf(
                     favouritesArr.find((o) => o.login === userData.login)
                 );
-
                 favouritesArr.splice(indexOfitemToDelete, 1);
-                console.log(favouritesArr);
+                this.favouritesCounter.textContent = favouritesArr.length;
             }
             localStorage.setItem("favourites", JSON.stringify(favouritesArr));
-            console.log(JSON.parse(localStorage.favourites));
         });
         this.usersBlock.append(userElement);
     }
     showUserRepos(userLogin) {
-        console.log("placed to LocalStorage: " + userLogin);
         localStorage.setItem(userLogin, JSON.stringify(userLogin));
     }
 

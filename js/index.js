@@ -1,5 +1,7 @@
 const preloader = document.querySelector(".preloader");
+
 // Functions //
+
 const createElement = (elementTag, elementClass = []) => {
     const element = document.createElement(elementTag);
     if (elementClass) {
@@ -37,7 +39,6 @@ function showUser() {
     (keys = Object.keys(localStorage)), (i = keys.length);
     while (i--) {
         user = JSON.parse(localStorage.getItem(keys[i]));
-        console.log(JSON.parse(localStorage.getItem(keys[i])));
     }
     loadUserRepos(user.login);
 
@@ -71,7 +72,6 @@ function showUser() {
 
     if (favouritesList.find((o) => o.login === user.login)) {
         userItemAddBtn.textContent = "Remove";
-        console.log("load users if");
         userItemAddBtn.classList.add("active");
     } else {
         userItemAddBtn.textContent = "ADD";
@@ -83,30 +83,32 @@ function showUser() {
         userItemAddBtn.classList.contains("active")
             ? (userItemAddBtn.textContent = "Remove")
             : (userItemAddBtn.textContent = "Add");
-        let favouritesList = JSON.parse(localStorage.getItem("favourites"));
 
-        console.log(favouritesList);
-        console.log("uraaa");
+        favouritesList = JSON.parse(localStorage.getItem("favourites"));
         if (!favouritesList.find((o) => o.login === user.login)) {
-            console.log("if");
             favouritesList.push(user);
             localStorage.setItem("favourites", JSON.stringify(favouritesList));
-            console.log(favouritesList);
+            favouritesCounter.textContent = favouritesList.length;
         } else {
-            console.log("else");
             let indexOfitemToDelete = favouritesList.indexOf(
                 favouritesList.find((o) => o.login === user.login)
             );
             favouritesList.splice(indexOfitemToDelete, 1);
             localStorage.setItem("favourites", JSON.stringify(favouritesList));
-            console.log(favouritesList);
+            favouritesCounter.textContent = favouritesList.length;
         }
     });
-    console.log(user.login);
     userPage.append(userItem);
     document.body.append(content);
 }
 // * Functions //
+
+let favouritesArr = JSON.parse(localStorage.getItem("favourites"));
+let favouritesCount = favouritesArr.length;
+let favouritesCounter = createElement("span");
+favouritesCounter.textContent = favouritesArr.length;
+let favouritesNav = document.querySelector(".favorites");
+favouritesNav.append(favouritesCounter);
 
 let content = createElement("div", ["container"]);
 let userPage = createElement("div", ["user__page"]);
@@ -120,11 +122,9 @@ async function loadUserRepos(login) {
     showLoader(true);
     return await fetch(`https://api.github.com/users/${login}/repos`)
         .then((res) => {
-            console.log(res);
             return res.json();
         })
         .then((data) => {
-            console.log(data);
             data.length === 0
                 ? (reposTitle.textContent = "User not have repos")
                 : (reposTitle.textContent = "Repositories");

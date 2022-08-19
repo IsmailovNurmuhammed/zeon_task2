@@ -4,6 +4,12 @@
   letter-spacing: 1.5px;
   background-color: $secondaryColor;
   margin-bottom: 50px;
+  padding-bottom: 80px;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+  height: 80px;
   &__inner{
     display: flex;
     justify-content: space-between;
@@ -17,6 +23,13 @@
       padding: 10px 20px;
       border: 2px solid $primaryColor;
       transition: 0.3s;
+      display: flex;
+      align-items: center;
+      span{
+        margin-left: 10px;
+        font-size: 16px;
+        font-family: $primaryFont, serif;
+      }
       &:hover{
         background-color: $primaryColor;
         color: $secondaryColor;
@@ -24,3 +37,6 @@
     }
   }
 }
+// .search__wrapper{
+//   margin-top: 100px;
+// }

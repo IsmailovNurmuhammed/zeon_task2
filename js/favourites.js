@@ -1,5 +1,4 @@
 let favouritesArr = JSON.parse(localStorage.getItem("favourites"));
-console.log(favouritesArr);
 
 const createElement = (elementTag, elementClass = []) => {
     const element = document.createElement(elementTag);
@@ -16,13 +15,19 @@ const showUserInfo = async (userLogin) => {
             return res.json();
         })
         .then((res) => {
-            console.log(res);
             localStorage.setItem(
                 res,
                 JSON.stringify(res)
             )((window.location.href = "/userPage.html"));
         });
 };
+
+let favouritesCount = favouritesArr.length;
+let favouritesCounter = createElement("span");
+favouritesCounter.textContent = favouritesArr.length;
+let favouritesNav = document.querySelector(".favorites");
+favouritesNav.append(favouritesCounter);
+
 const clearPage = () => {
     content.innerHTML = "";
 };
@@ -30,9 +35,8 @@ const pageName = createElement("h1", ["favourites__title"]);
 
 const createFavouritesList = (list) => {
     const block = createElement("div", ["favourites__list"]);
-
+    let favouritesList = JSON.parse(localStorage.getItem("favourites"));
     list.forEach((item) => {
-        console.log(item);
         const user = createElement("div", ["favourite__user"]);
         const userImg = createElement("div", ["favourite__user_img"]);
         const avatar = createElement("img");
@@ -63,17 +67,12 @@ const createFavouritesList = (list) => {
             showUserInfo(item.login);
         });
         userInfoFavourite.addEventListener("click", () => {
-            let favouritesList = JSON.parse(localStorage.getItem("favourites"));
-
             userInfoFavourite.classList.toggle("active");
             userInfoFavourite.classList.contains("active")
                 ? (userInfoFavourite.textContent = "ADD")
                 : (userInfoFavourite.textContent = "Remove");
 
-            console.log(!favouritesList.find((o) => o.login === item.login));
-
             if (!favouritesList.find((o) => o.login === item.login)) {
-                console.log("if");
                 favouritesList.push(item);
                 localStorage.setItem(
                     "favourites",
@@ -82,7 +81,6 @@ const createFavouritesList = (list) => {
                 clearPage();
                 createFavouritesList(favouritesList);
             } else {
-                console.log("else");
                 let indexOfitemToDelete = favouritesList.indexOf(
                     favouritesList.find((o) => o.login === item.login)
                 );
@@ -91,7 +89,6 @@ const createFavouritesList = (list) => {
                     "favourites",
                     JSON.stringify(favouritesList)
                 );
-                console.log(favouritesList);
                 clearPage();
                 createFavouritesList(favouritesList);
             }
@@ -99,7 +96,11 @@ const createFavouritesList = (list) => {
 
         block.append(user);
     });
-    pageName.textContent = "Favourites";
+    favouritesCounter.textContent = favouritesList.length;
+    favouritesList.length === 0
+        ? (pageName.textContent = "You not have Favourite users")
+        : (pageName.textContent = "Favourites");
+
     content.append(pageName);
     content.append(block);
     document.body.append(content);

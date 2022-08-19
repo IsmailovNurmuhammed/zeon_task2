@@ -30,17 +30,14 @@ export class Search {
         this.selectedOrder = this.view.order.value;
 
         this.view.sort.addEventListener("change", () => {
-            console.log("sort Change");
             this.selectedSort = this.view.sort.value;
             this.getUsers();
         });
         this.view.order.addEventListener("change", () => {
-            console.log("order Change");
             this.selectedOrder = this.view.order.value;
             this.getUsers();
         });
         this.view.perPage.addEventListener("change", () => {
-            console.log("perPage change");
             this.getUsers();
         });
 
@@ -51,22 +48,15 @@ export class Search {
             this.loadPrevPage();
         });
         this.view.paginationInput.addEventListener("change", () => {
-            console.log(
-                "PaginationInput Value: " + this.view.paginationInput.value
-            );
             if (this.view.paginationInput.value >= this.maxPage) {
                 this.setCurrentPage(this.maxPage);
                 this.getUsers();
-                console.log("Pagiantion page:   " + this.currentPage);
             } else if (this.view.paginationInput.value < 1) {
                 this.setCurrentPage(1);
                 this.getUsers();
-                console.log("Pagiantion page:   " + this.currentPage);
             } else {
                 this.setCurrentPage(parseInt(this.view.paginationInput.value));
                 this.getUsers();
-                console.log("Pagiantion page:   " + this.currentPage);
-                console.log(this.currentPage);
             }
         });
         // Auto fetch in empty input //
@@ -77,23 +67,16 @@ export class Search {
 
     getUsers() {
         this.userString = this.view.search.value;
-        console.log("Auto fetch value: " + this.firstFetch);
-        console.log("user String: " + this.userString);
         if (this.view.search.value) {
-            console.log("User fetch: " + this.userString);
-            console.log("Pagiantion page: " + this.currentPage);
             this.view.setCounterMessage("");
             this.clearUsers();
             this.usersRequest(this.userString);
         } else if (this.userString === "") {
             this.userString = this.firstFetch;
-            console.log("Auto fetch: " + this.firstFetch);
-            console.log("Pagiantion page: " + this.currentPage);
             this.view.setCounterMessage("");
             this.clearUsers();
             this.usersRequest(this.userString);
         } else {
-            console.log("not");
             this.clearUsers();
             this.view.setCounterMessage("Enter your request");
         }
@@ -101,12 +84,10 @@ export class Search {
 
     loadNextPage() {
         if (this.maxPage === this.currentPage) {
-            console.log(this.currentPage);
             this.currentPage = this.maxPage;
         } else {
             this.setCurrentPage(this.currentPage + 1);
             this.getUsers();
-            console.log("Chanded number of page: " + this.currentPage);
         }
     }
     loadPrevPage() {
@@ -116,16 +97,12 @@ export class Search {
             this.firstFetch
         ) {
             this.setCurrentPage(this.currentPage - 1);
-            console.log("Pagiantion page less: " + this.currentPage);
             this.getUsers();
-            console.log("Pagiantion page: " + this.currentPage);
         } else if (this.currentPage > 1 && this.view.search.value !== "") {
             this.setCurrentPage(this.currentPage - 1);
             this.getUsers(this.view.search.value);
-            console.log("Pagiantion page: " + this.maxPage);
         } else {
             this.currentPage = 1;
-            console.log("No page less than 1: " + this.currentPage);
         }
     }
 
@@ -146,7 +123,6 @@ export class Search {
                 .then((res) => {
                     if (res.ok) {
                         res.json().then((res) => {
-                            console.log(res);
                             users = res.items;
                             totalCount = res.total_count;
                             message = this.log.counterMessage(totalCount);
@@ -154,14 +130,11 @@ export class Search {
                             this.setMaxPageCount();
                             this.view.paginationInput.placeholder =
                                 this.maxPage;
-                            console.log(
-                                "Max available value of page: " + this.maxPage
-                            );
+
                             this.view.setCounterMessage(message);
                             users.forEach((user) => this.view.createUser(user));
                         });
                     } else {
-                        console.log("Error:" + res.status);
                         this.view.errorMessageText.textContent =
                             "HTTP Error: " + res.status;
                         this.view.app.append(this.view.errorBlock);
@@ -169,7 +142,6 @@ export class Search {
                 });
         } catch (e) {
             //обработка ошибок и вывод в консоль
-            console.log("Error:" + e);
             this.view.errorMessageText.textContent = e;
             this.view.app.append(this.view.errorBlock);
         } finally {
