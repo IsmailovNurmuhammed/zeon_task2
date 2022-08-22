@@ -15,9 +15,8 @@ export class Search {
         this.log = log;
 
         this.view.showLoader(true);
-
         this.userString;
-
+        this.firstSearch = true;
         this.view.search.addEventListener(
             "keyup",
             this.debounce(this.getUsers.bind(this), 1000)
@@ -60,22 +59,37 @@ export class Search {
             }
         });
         // Auto fetch in empty input //
-        this.firstFetch = Math.random().toString(36).slice(-2);
-        this.getUsers();
+        if (this.view.search.value) {
+            this.currentPage = 1;
+            this.getUsers(this.view.search.value);
+        } else {
+            this.firstFetch = Math.random().toString(36).slice(-2);
+            this.getUsers();
+        }
         // * Auto fetch in empty input //
     }
 
     getUsers() {
+        if (localStorage.getItem("favourites") === null) {
+            localStorage.setItem("favourites", "[]");
+        }
         this.userString = this.view.search.value;
-        if (this.view.search.value) {
+        if (this.userString) {
+            if (this.firstSearch === true) {
+                this.currentPage = 1;
+                this.firstSearch = false;
+            }
             this.view.setCounterMessage("");
             this.clearUsers();
             this.usersRequest(this.userString);
+            this.view.currentPageNumber.textContent = "Page" + this.currentPage;
         } else if (this.userString === "") {
+            this.firstSearch = true;
             this.userString = this.firstFetch;
             this.view.setCounterMessage("");
             this.clearUsers();
             this.usersRequest(this.userString);
+            this.view.currentPageNumber.textContent = "Page" + this.currentPage;
         } else {
             this.clearUsers();
             this.view.setCounterMessage("Enter your request");
@@ -130,7 +144,6 @@ export class Search {
                             this.setMaxPageCount();
                             this.view.paginationInput.placeholder =
                                 this.maxPage;
-
                             this.view.setCounterMessage(message);
                             users.forEach((user) => this.view.createUser(user));
                         });

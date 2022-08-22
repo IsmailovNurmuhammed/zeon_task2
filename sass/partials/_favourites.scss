@@ -12,10 +12,16 @@ row-gap: 20px;
   height: 200px;
   justify-content: space-between;
   border-radius: 5px;
+  // flex-wrap: wrap;
+  @include small {
+    height: auto;
+    flex-direction: column;
+  }
 }
 .favourite__user_img {
   width: 200px;
   height: 200px;
+  margin: 0 auto;
   img{
     width: 100%;
     border-radius: 5px;
@@ -27,6 +33,9 @@ row-gap: 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  @include small{
+    row-gap: 20px;
+  }
 }
 .favourite__user_top {
   display: flex;

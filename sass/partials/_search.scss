@@ -17,6 +17,9 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    @include large{
+      margin: 10px 0;
+    }
   }
   @include small{
     &:first-child{

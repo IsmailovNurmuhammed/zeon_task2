@@ -1,5 +1,4 @@
 let favouritesArr = JSON.parse(localStorage.getItem("favourites"));
-
 const createElement = (elementTag, elementClass = []) => {
     const element = document.createElement(elementTag);
     if (elementClass) {

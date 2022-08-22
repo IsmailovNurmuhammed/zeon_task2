@@ -12,4 +12,8 @@
 }
 .pagination__item_input{
   width: 100px;
+  @include very-small{
+    width: 70px;
+    padding: 10px 10px;
+  }
 }

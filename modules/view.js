@@ -4,8 +4,10 @@ export class View {
         this.api = api;
         this.search = search;
 
+        if (localStorage.getItem("favourites") === null) {
+            localStorage.setItem("favourites", "[]");
+        }
         this.favouritesArr = JSON.parse(localStorage.getItem("favourites"));
-
         this.favouritesCount = this.favouritesArr.length;
         this.favouritesCounter = this.createElement("span");
         this.favouritesCounter.textContent = this.favouritesArr.length;
@@ -25,8 +27,11 @@ export class View {
         ]);
         this.paginationPrev.textContent = "<< Prev";
         this.paginationNext.textContent = "Next >>";
+
+        this.currentPageNumber = this.createElement("div", ["current__page"]);
         this.paginationWrapper.append(
             this.paginationPrev,
+            this.currentPageNumber,
             this.paginationInput,
             this.paginationNext
         );
